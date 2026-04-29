@@ -6,7 +6,7 @@
   },
 
 
-  "remarks": "MITM-DomainFronting_v3",
+  "remarks": "MITM-DomainFronting_v4",
 
   "version": {
     "min": "26.2.6"
@@ -30,7 +30,8 @@
       "geosite:category-ads-all": "#3",
       "google-main-services.redirect": "216.239.38.120",
 	  "vercel-sites.redirect": "react.dev",
-	  "fastly.redirect": "www.python.org"
+	  "fastly.redirect": "www.python.org",
+	  "amazon-cloudfront.redirect": "letsencrypt.org"
     },
     "servers": [
       "fakedns",
@@ -247,6 +248,31 @@
           }
         }
       }
+    },
+	{
+      "tag": "tls-repack-amazon-cloudfront",
+      "protocol": "direct",
+      "settings": {
+        "redirect": "amazon-cloudfront.redirect:443"
+      },
+      "streamSettings": {
+        "security": "tls",
+        "tlsSettings": {
+          "serverName": "letsencrypt.org",
+          "verifyPeerCertByName": "fromMitM,letsencrypt.org,aws.amazon.com,aws-us-west-2.amazon.com,www.aws.amazon.com,1.aws-lbr.amazonaws.com,amazonaws-china.com,www.amazonaws-china.com,aws-us-east-1.amazon.com",
+          "alpn": ["fromMitM"],
+          "fingerprint": "chrome"
+        },
+		"sockopt": {
+          "domainStrategy": "ForceIP",
+          "happyEyeballs": {
+            "tryDelayMs": 300,
+            "prioritizeIPv6": false,
+            "interleave": 2,
+            "maxConcurrentTry": 20
+          }
+        }
+      }
     }
   ],
 
@@ -290,6 +316,11 @@
        "inboundTag": ["tls-decrypt-h211"]
 	  },
 	  {
+	   "outboundTag": "tls-repack-amazon-cloudfront",
+       "domain": ["geosite:netlify"],
+       "inboundTag": ["tls-decrypt-h211"]
+	  },
+	  {
 	   "outboundTag": "tls-repack-fastly",
        "ip": ["geoip:fastly"],
        "inboundTag": ["tls-decrypt-h211"]
@@ -308,7 +339,7 @@
         "outboundTag": "redirect-out-h211",
         "network": "tcp",
         "port": 443,
-        "domain": ["geosite:google", "geosite:vercel", "geosite:fastly", "geosite:reddit", "domain:githubassets.com", "domain:githubusercontent.com"]
+        "domain": ["geosite:google", "geosite:vercel", "geosite:fastly", "geosite:reddit", "domain:githubassets.com", "domain:githubusercontent.com", "geosite:netlify"]
       },
       {
 	   "outboundTag": "direct",
