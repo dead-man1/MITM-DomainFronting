@@ -6,7 +6,7 @@
   },
 
 
-  "remarks": "MITM-DomainFronting_v5",
+  "remarks": "MITM-DomainFronting_v6",
 
   "version": {
     "min": "26.2.6"
@@ -293,7 +293,7 @@
       },
       {
 	   "outboundTag": "direct",
-       "domain": ["domain:ir", "geosite:private", "geosite:category-ir"]
+       "domain": ["domain:ir", "geosite:private", "geosite:category-ir", "geosite:khanacademy"]
       },
       {
 	   "outboundTag": "tls-repack-googlevideo",
